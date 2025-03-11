@@ -11,7 +11,7 @@ a = Analysis(
     datas=[
         ('assets/*', 'assets'),
     ],
-    hiddenimports=['pandas', 'panel', 'bokeh', 'tornado'],
+    hiddenimports=['pandas', 'PySide6'],
     hookspath=[],
     runtime_hooks=[],
     excludes=[],
@@ -29,7 +29,7 @@ if sys.platform == 'darwin':
         a.scripts,
         [],
         exclude_binaries=True,
-        name='lumberjills-tipper',
+        name='lumber-jills-tip-calculator',
         debug=False,
         bootloader_ignore_signals=False,
         strip=False,
@@ -42,9 +42,9 @@ if sys.platform == 'darwin':
         a.binaries,
         a.zipfiles,
         a.datas,
-        name='Lumber Jills Tipper.app',
+        name="Lumber Jill's Tip Calculator.app",
         icon='assets/lumberjillslogo.png',
-        bundle_identifier='com.yourname.lumberjills-tipper',
+        bundle_identifier='com.yourname.lumber-jills-tip-calculator',
     )
 else:
     try:
@@ -53,7 +53,7 @@ else:
             a.scripts,
             [],
             exclude_binaries=True,
-            name='lumberjills-tipper',
+            name='lumber-jills-tip-calculator',
             debug=False,
             bootloader_ignore_signals=False,
             strip=False,
@@ -67,7 +67,7 @@ else:
             a.scripts,
             [],
             exclude_binaries=True,
-            name='lumberjills-tipper',
+            name='lumber-jills-tip-calculator',
             debug=False,
             bootloader_ignore_signals=False,
             strip=False,
@@ -84,5 +84,5 @@ else:
             strip=False,
             upx=True,
             upx_exclude=[],
-            name='lumberjills-tipper',
+            name='lumber-jills-tip-calculator',
         )
