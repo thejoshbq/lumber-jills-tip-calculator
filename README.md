@@ -15,8 +15,16 @@
 
 ## Using the Prebuilt Executable
 
-1. **Download**: Obtain the executable from the Releases page (e.g., lumberjills-tipper.exe for Windows or LJ's Tipper.app for macOS).
-2. **Run**: Double-click the executable file to launch the application. Ensure the assets folder with lumberjillslogo.png is in the same directory as the executable.
+You can download the latest version of **Lumber Jill's Tip Calculator** for your operating system below:
+
+| **Operating System**       | **Download Link**                                                                                          |
+|----------------------------|------------------------------------------------------------------------------------------------------------|
+| **Windows**                | [Download lumber-jills-tip-calculator-1.0-x64.exe](https://github.com/thejoshbq/lumber-jills-tip-calculator/releases/latest/download/lumber-jills-tip-calculator-1.0-x64.exe) |
+| **Linux (Ubuntu/Debian)**  | [Download lumber_jills_tip_calculator_1.0_amd64.deb](https://github.com/thejoshbq/lumber-jills-tip-calculator/releases/latest/download/lumber_jills_tip_calculator_1.0_amd64.deb) |
+| **macOS**                  | [Download lumber-jills-tip-calculator-1.0-macos.dmg](https://github.com/thejoshbq/lumber-jills-tip-calculator/releases/latest/download/lumber-jills-tip-calculator-1.0-macos.dmg) |
+
+1. **Download**: Use the links above or visit the [Releases](https://github.com/thejoshbq/lumber-jills-tip-calculator/releases) page.
+2. **Run**: Double-click the executable file to launch the application. Ensure the `assets` folder with `lumberjillslogo.png` is in the same directory as the executable.
 
 ## Usage
 
