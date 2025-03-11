@@ -1,0 +1,155 @@
+name: Build Installers for Lumber Jill's Tip Calculator
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyinstaller PySide6 pandas openpyxl
+      - name: Build with PyInstaller using spec
+        run: pyinstaller setup.spec
+      - name: Install Inno Setup
+        run: choco install innosetup
+      - name: Build Installer
+        run: |
+          iscc /O"dist" /F"lumber-jills-tip-calculator-1.0-x64" setup.iss
+      - name: Upload Windows installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: lumber-jills-tip-calculator-1.0-x64.exe
+          path: dist/lumber-jills-tip-calculator-1.0-x64.exe
+
+  build-macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: |
+          python3 -m pip install --upgrade pip
+          pip3 install pyinstaller PySide6 pandas openpyxl
+      - name: Build with PyInstaller
+        run: pyinstaller setup.spec
+      - name: Create DMG
+        run: |
+          hdiutil create -volname "Lumber Jill's Tip Calculator" -srcfolder "dist/Lumber Jill's Tip Calculator.app" -ov -format UDZO lumber-jills-tip-calculator-1.0-macos.dmg
+      - name: Upload DMG
+        uses: actions/upload-artifact@v4
+        with:
+          name: lumber-jills-tip-calculator-1.0-macos.dmg
+          path: lumber-jills-tip-calculator-1.0-macos.dmg
+
+  build-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: |
+          pip install pyinstaller PySide6 pandas openpyxl
+          sudo apt install python3-tk -y
+      - name: Build with PyInstaller using spec
+        run: pyinstaller setup.spec
+      - name: Create DEB structure
+        run: |
+          mkdir -p lumber_jills_tip_calculator_1.0_amd64/DEBIAN
+          mkdir -p lumber_jills_tip_calculator_1.0_amd64/opt/lumber-jills-tip-calculator
+          mkdir -p lumber_jills_tip_calculator_1.0_amd64/usr/local/bin
+          echo "Package: lumber-jills-tip-calculator
+          Version: 1.0
+          Section: utils
+          Priority: optional
+          Architecture: amd64
+          Depends: python3 (>= 3.11), python3-tk
+          Maintainer: Joshua Boquiren <thejoshbq@proton.me>
+          Description: Lumber Jill's Tip Calculator - A tip calculation application" > lumber_jills_tip_calculator_1.0_amd64/DEBIAN/control
+          cp -r dist/lumber-jills-tip-calculator/* lumber_jills_tip_calculator_1.0_amd64/opt/lumber-jills-tip-calculator/
+          chmod +x lumber_jills_tip_calculator_1.0_amd64/opt/lumber-jills-tip-calculator/lumber-jills-tip-calculator
+          ln -s /opt/lumber-jills-tip-calculator/lumber-jills-tip-calculator lumber_jills_tip_calculator_1.0_amd64/usr/local/bin/lumber-jills-tip-calculator
+      - name: Build DEB package
+        run: dpkg-deb --build lumber_jills_tip_calculator_1.0_amd64
+      - name: Upload DEB
+        uses: actions/upload-artifact@v4
+        with:
+          name: lumber_jills_tip_calculator_1.0_amd64.deb
+          path: lumber_jills_tip_calculator_1.0_amd64.deb
+
+  release:
+    needs: [build-windows, build-macos, build-linux]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download Windows artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: lumber-jills-tip-calculator-1.0-x64.exe
+          path: dist/windows
+      - name: Download macOS artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: lumber-jills-tip-calculator-1.0-macos.dmg
+          path: dist/macos
+      - name: Download Linux artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: lumber_jills_tip_calculator_1.0_amd64.deb
+          path: dist/linux
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v1.0.${{ github.run_number }}
+          release_name: Release v1.0.${{ github.run_number }}
+          draft: false
+          prerelease: false
+      - name: Upload Windows Installer
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: dist/windows/lumber-jills-tip-calculator-1.0-x64.exe
+          asset_name: lumber-jills-tip-calculator-1.0-x64.exe
+          asset_content_type: application/octet-stream
+      - name: Upload macOS DMG
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: dist/macos/lumber-jills-tip-calculator-1.0-macos.dmg
+          asset_name: lumber-jills-tip-calculator-1.0-macos.dmg
+          asset_content_type: application/x-diskcopy
+      - name: Upload Linux DEB
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: dist/linux/lumber_jills_tip_calculator_1.0_amd64.deb
+          asset_name: lumber_jills_tip_calculator_1.0_amd64.deb
+          asset_content_type: application/vnd.debian.binary-package
