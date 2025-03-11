@@ -35,7 +35,7 @@ if sys.platform == 'darwin':
         strip=False,
         upx=True,
         console=False,
-        icon='assets/lumberjillslogo.png',
+        icon='assets/lumberjillslogo.icns',
     )
     app = BUNDLE(
         exe,
@@ -43,7 +43,7 @@ if sys.platform == 'darwin':
         a.zipfiles,
         a.datas,
         name="Lumber Jill's Tip Calculator.app",
-        icon='assets/lumberjillslogo.png',
+        icon='assets/lumberjillslogo.icns',
         bundle_identifier='com.yourname.lumber-jills-tip-calculator',
     )
 else:
