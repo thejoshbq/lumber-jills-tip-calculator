@@ -1,4 +1,9 @@
-.venv/
-*/dist/*
-*/build/*
-*/assets/*
+**/build/
+**/dist/
+/venv/
+/.venv/
+**/__pycache__/
+/installers/
+**/zip/
+/.vscode/
+**/assets/
