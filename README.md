@@ -1,3 +1,18 @@
+<div align="center">
+    <a href="https://www.throwlumberjills.com/"><img src="assets/lumberjillslogo.png" alt="Lumber Jill's logo"></a>
+</div>
+<br>
+
+*Written by*: Joshua Boquiren
+
+[![](https://img.shields.io/badge/@thejoshbq-grey?style=for-the-badge&logo=github)](https://github.com/thejoshbq) [![](https://img.shields.io/badge/@thejoshbq-grey?style=for-the-badge&logo=X)](https://x.com/thejoshbq) 
+ 
+<br>
+
+---
+
+## Overview
+
 # Lumber Jill's Tip Calculator
 
 **Lumber Jill's Tip Calculator** is a standalone desktop application designed for Lumber Jill's Axe Throwing Lounge to calculate and distribute tips among employees based on timecard data from CSV or Excel files. Built with Python and PySide6, it offers a modern, user-friendly interface with a dark theme, supporting three tip-splitting methods: Daily Percentage, Even Split, and Custom Split.
